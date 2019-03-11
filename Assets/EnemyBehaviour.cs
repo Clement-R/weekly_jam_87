@@ -8,7 +8,7 @@ using DG.Tweening;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    public bool IsVisible { get { return m_isVisible;  } }
+    public bool IsVisible { get { return m_isVisible; } }
     public string Combo;
 
     [SerializeField] private GameObject m_comboUIContainer;
@@ -39,7 +39,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             positions.Add(m_comboElements[i].GetComponent<RectTransform>().position);
         }
-        
+
         m_containerRt.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = false;
         m_containerRt.GetComponent<ContentSizeFitter>().enabled = false;
 
@@ -52,8 +52,21 @@ public class EnemyBehaviour : MonoBehaviour
     void Update()
     {
         transform.position = new Vector2(Mathf.RoundToInt(transform.position.x - (Time.deltaTime * GameOrchestrator.Instance.ScrollSpeed)), transform.position.y);
-
         m_isVisible = transform.position.x - (m_containerRt.rect.width / 2f) <= 128f;
+    }
+
+    private IEnumerator _Kill(SpriteRenderer p_sr)
+    {
+        p_sr.color = Color.red;
+        yield return null;
+        yield return null;
+        Destroy(gameObject);
+    }
+
+    public void Kill()
+    {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        StartCoroutine(_Kill(sr));
     }
 
     public void ValidateInput(int p_index)
@@ -66,7 +79,6 @@ public class EnemyBehaviour : MonoBehaviour
     public void WrongInput(int p_index)
     {
         GameObject comboElement = m_comboElements[p_index];
-
 
         if(!m_isPlaying)
         {

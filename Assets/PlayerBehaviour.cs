@@ -31,6 +31,7 @@ public class PlayerBehaviour : MonoBehaviour
     private IEnumerator _Attack()
     {
         yield return null;
+        m_enemy.Kill();
         m_animator.SetBool("Attack", false);
     }
 }
